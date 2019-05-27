@@ -90,19 +90,13 @@ public class Estrella implements GLEventListener {
         // Reset the current matrix to the "identity"
         gl.glLoadIdentity();
 
-        // Move the "drawing cursor" around
-        /*gl.glTranslatef(-1.5f, 0.0f, -6.0f);
-
-        // Drawing Using Triangles
-        gl.glBegin(GL.GL_TRIANGLES);
-            gl.glColor3f(1.0f, 0.0f, 0.0f);    // Set the current drawing color to red
-            gl.glVertex3f(0.0f, 1.0f, 0.0f);   // Top
-            gl.glColor3f(0.0f, 1.0f, 0.0f);    // Set the current drawing color to green
-            gl.glVertex3f(-1.0f, -1.0f, 0.0f); // Bottom Left
-            gl.glColor3f(0.0f, 0.0f, 1.0f);    // Set the current drawing color to blue
-            gl.glVertex3f(1.0f, -1.0f, 0.0f);  // Bottom Right
-        // Finished Drawing The Triangle
-        gl.glEnd();*/
+        float inicio = 0.05f;
+           
+        float x = inicio;
+        float y = inicio;
+              
+        float nuevoX;
+        float nuevaY;
 
         // Move the "drawing cursor" to another position
         gl.glTranslatef(-0.0f, 0.0f, -6.0f);
@@ -119,9 +113,9 @@ public class Estrella implements GLEventListener {
         gl.glBegin(GL.GL_TRIANGLES);
             gl.glColor3f(1.0f, 0.0f, 0.0f);    // Set the current drawing color to red
             gl.glVertex3f(0.0f, -1.85f, 0.0f);   // Top
-            gl.glColor3f(0.0f, 1.0f, 0.0f);    // Set the current drawing color to green
+            //gl.glColor3f(0.0f, 1.0f, 0.0f);    // Set the current drawing color to green
             gl.glVertex3f(-1.5f, 1.0f, 0.0f); // Bottom Left
-            gl.glColor3f(0.0f, 0.0f, 1.0f);    // Set the current drawing color to blue
+            //gl.glColor3f(0.0f, 0.0f, 1.0f);    // Set the current drawing color to blue
             gl.glVertex3f(1.5f, 1.0f, 0.0f);  // Bottom Right
         // Finished Drawing The Triangle
         gl.glEnd();
@@ -131,16 +125,70 @@ public class Estrella implements GLEventListener {
         gl.glBegin(GL.GL_TRIANGLES);
             gl.glColor3f(1.0f, 0.0f, 0.0f);    // Set the current drawing color to red
             gl.glVertex3f(0.0f, 1.85f, 0.0f);   // Top
-            gl.glColor3f(0.0f, 1.0f, 0.0f);    // Set the current drawing color to green
+            //gl.glColor3f(0.0f, 1.0f, 0.0f);    // Set the current drawing color to green
             gl.glVertex3f(-1.5f, -1.0f, 0.0f); // Bottom Left
-            gl.glColor3f(0.0f, 0.0f, 1.0f);    // Set the current drawing color to blue
+            //gl.glColor3f(0.0f, 0.0f, 1.0f);    // Set the current drawing color to blue
             gl.glVertex3f(1.5f, -1.0f, 0.0f);  // Bottom Right
         // Finished Drawing The Triangle
         gl.glEnd();
         
         //gl.glTranslatef(-0.0f, 0.0f, -6.0f);
         
-        
+        gl.glColor3f(1.0f, 1.f, 1.f);
+            gl.glBegin(GL.GL_LINE_LOOP);
+            // Dibujamos el primer vértice
+            gl.glVertex2f(x, y);
+            for (int i = 1; i < 360; i++) {
+                // Coordenada x' = x*cos(1º) - y*sin(1º)
+                nuevoX = (float) (x * Math.cos(Math.toRadians(1)) - y * Math.sin(Math.toRadians(1)));
+                // Coordenada y' = x*sin(1º) + y*cos(1º)
+                nuevaY = (float) (x * Math.sin(Math.toRadians(1)) + y * Math.cos(Math.toRadians(1)));
+                // Sobreescribimos las variables coordenadaX y coordenadaY
+                x = nuevoX;
+                y = nuevaY;
+                // Dibujamos el nuevo vértice obtenido
+                gl.glVertex2f(x, y);
+            }
+           
+            gl.glEnd();
+            
+                        
+           /*gl.glTranslatef(0.0f, 2.5f, -6.0f); 
+           gl.glBegin(GL.GL_LINE_LOOP);
+            // Dibujamos el primer vértice
+            gl.glVertex2f(x, y);
+            for (int i = 1; i < 360; i++) {
+                // Coordenada x' = x*cos(1º) - y*sin(1º)
+                nuevoX = (float) (x * Math.cos(Math.toRadians(1)) - y * Math.sin(Math.toRadians(1)));
+                // Coordenada y' = x*sin(1º) + y*cos(1º)
+                nuevaY = (float) (x * Math.sin(Math.toRadians(1)) + y * Math.cos(Math.toRadians(1)));
+                // Sobreescribimos las variables coordenadaX y coordenadaY
+                x = nuevoX;
+                y = nuevaY;
+                // Dibujamos el nuevo vértice obtenido
+                gl.glVertex2f(x, y);
+            }
+           
+            gl.glEnd();
+            
+            
+            gl.glTranslatef(0.0f, -6.5f, -6.0f); 
+            gl.glBegin(GL.GL_LINE_LOOP);
+            // Dibujamos el primer vértice
+            gl.glVertex2f(x, y);
+            for (int i = 1; i < 360; i++) {
+                // Coordenada x' = x*cos(1º) - y*sin(1º)
+                nuevoX = (float) (x * Math.cos(Math.toRadians(1)) - y * Math.sin(Math.toRadians(1)));
+                // Coordenada y' = x*sin(1º) + y*cos(1º)
+                nuevaY = (float) (x * Math.sin(Math.toRadians(1)) + y * Math.cos(Math.toRadians(1)));
+                // Sobreescribimos las variables coordenadaX y coordenadaY
+                x = nuevoX;
+                y = nuevaY;
+                // Dibujamos el nuevo vértice obtenido
+                gl.glVertex2f(x, y);
+            }
+           
+            gl.glEnd();*/
 
         // Flush all drawing operations to the graphics card
         gl.glFlush();

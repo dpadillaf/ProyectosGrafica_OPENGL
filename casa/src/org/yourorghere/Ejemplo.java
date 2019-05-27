@@ -95,6 +95,7 @@ public class Ejemplo implements GLEventListener {
 
         // Move the "drawing cursor" to another position
         gl.glTranslatef(1.5f, -1.0f, 0.0f);
+                
         // Draw A Quad
         gl.glBegin(GL.GL_QUADS);
             gl.glColor3f(0.5f, 0.5f, 1.0f);    // Set the current drawing color to light blue
@@ -122,6 +123,15 @@ public class Ejemplo implements GLEventListener {
             gl.glVertex3f(-0.5f, -1.0f, 0.0f); // Bottom Left
         // Done Drawing The Quad
         gl.glEnd();
+        
+        gl.glColor3f(0,0,1);//Colore Blue
+	gl.glPointSize(10);//Dimension 10
+	gl.glEnable(GL.GL_POINT_SMOOTH);// antialiasing
+	gl.glBegin(GL.GL_POINTS);
+            gl.glVertex2f(0.3f,-0.5f);
+            //gl.glVertex2f(0.1f,-0.4f);
+            //gl.glVertex2f(0.5f,-0.1f);
+	gl.glEnd();
         
         gl.glBegin(GL.GL_QUADS);
             gl.glColor3f(0.3f, 0.5f, 1.0f);    // Set the current drawing color to light blue
