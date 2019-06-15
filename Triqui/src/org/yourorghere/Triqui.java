@@ -28,11 +28,14 @@ import javax.media.opengl.glu.GLU;
  * This version is equal to Brian Paul's version 1.2 1999/10/21
  */
 public class Triqui implements GLEventListener {
-    int x,o;
+    int x,o, los, res, nul;
+    static int linea=7;
     static int matriz [][] = new int [3][3];
     static boolean sombra [][] = new boolean [3][3];
     private static int posX = -1;
     private static int posY = -1;
+    static boolean lose = false, reset = false, nulle = false, dib_lin = true;
+    
     
 
     public static void main(String[] args) {
@@ -147,40 +150,82 @@ public class Triqui implements GLEventListener {
             sombra[2][2] = false;
             maquina();
         }
+        
+        if ( posX>527 && posX<611 && posY>328 && posY<405 && reset ){
+            resetear();
+        }
     }
     
     private static void comprueba (){
         if (matriz[0][0]==0 && matriz[0][1]==0 && matriz[0][2]==0){
-            System.out.println( "linea superior_H" );
+            dib_lin = true;
+            linea = 1;
+            lose = true;
+            reset = true;
         }
         
         if (matriz[1][0]==0 && matriz[1][1]==0 && matriz[1][2]==0){
-            System.out.println( "linea media_H" );
+            dib_lin = true;
+            linea = 2;
+            lose = true;
+            reset = true;
         }
         
         if (matriz[2][0]==0 && matriz[2][1]==0 && matriz[2][2]==0){
-            System.out.println( "linea inferior_H" );
+            dib_lin = true;
+            linea = 3;
+            lose = true;
+            reset = true;
         }
         
         if (matriz[0][0]==0 && matriz[1][0]==0 && matriz[2][0]==0){
-            System.out.println( "linea izquierda_V" );
+            dib_lin = true;
+            linea = 4;
+            lose = true;
+            reset = true;
         }
         
         if (matriz[0][1]==0 && matriz[1][1]==0 && matriz[2][1]==0){
-            System.out.println( "linea media_V" );
+            dib_lin = true;
+            linea = 5;
+            lose = true;
+            reset = true;
         }
         
         if (matriz[0][2]==0 && matriz[1][2]==0 && matriz[2][2]==0){
-            System.out.println( "linea derecha_V" );
+            dib_lin = true;
+            linea = 6;
+            lose = true;
+            reset = true;
         }
         
         if (matriz[0][0]==0 && matriz[1][1]==0 && matriz[2][2]==0){
-            System.out.println( "linea diagonal_1" );
+            dib_lin = true;
+            linea = 7;
+            lose = true;
+            reset = true;
         }
         
         if (matriz[0][2]==0 && matriz[1][1]==0 && matriz[2][0]==0){
-            System.out.println( "linea diagonal_2" );
+            dib_lin = true;
+            linea = 8;
+            lose = true;
+            reset = true;
         }
+        
+        if (nulo()){
+            reset = true;
+            nulle = true;
+        }
+    }
+    
+    static private boolean nulo (){
+        for (int i=0; i<3; i++){
+            for (int j=0; j<3; j++){
+                if (sombra[i][j]){ return false; }
+            }
+        }
+        return true;
     }
     
     private static void maquina (){
@@ -302,12 +347,7 @@ public class Triqui implements GLEventListener {
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glShadeModel(GL.GL_SMOOTH); // try setting this to GL_FLAT and see what happens.
         
-        for (int i=0; i<3; i++){
-            for (int j=0; j<3; j++){
-                matriz[i][j] = -1;
-                sombra[i][j] = true;
-            }
-        }
+        resetear();
         
         File img;
         Texture tex;
@@ -329,6 +369,39 @@ public class Triqui implements GLEventListener {
             img = new File("src/img/o.png");
             tex = TextureIO.newTexture(img, true);
             o = tex.getTextureObject();
+        } catch (IOException ex) {
+            Logger.getLogger(Triqui.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (GLException ex) {
+            Logger.getLogger(Triqui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            
+            img = new File("src/img/lose.png");
+            tex = TextureIO.newTexture(img, true);
+            los = tex.getTextureObject();
+        } catch (IOException ex) {
+            Logger.getLogger(Triqui.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (GLException ex) {
+            Logger.getLogger(Triqui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            
+            img = new File("src/img/reset.png");
+            tex = TextureIO.newTexture(img, true);
+            res = tex.getTextureObject();
+        } catch (IOException ex) {
+            Logger.getLogger(Triqui.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (GLException ex) {
+            Logger.getLogger(Triqui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            
+            img = new File("src/img/null.png");
+            tex = TextureIO.newTexture(img, true);
+            nul = tex.getTextureObject();
         } catch (IOException ex) {
             Logger.getLogger(Triqui.class.getName()).log(Level.SEVERE, null, ex);
         } catch (GLException ex) {
@@ -378,62 +451,7 @@ public class Triqui implements GLEventListener {
 	gl.glEnd();
         
         
-        /*gl.glEnable(GL.GL_TEXTURE_2D);
         
-        gl.glBindTexture(GL.GL_TEXTURE_2D, x);
-            gl.glBegin(GL.GL_QUADS);
-            gl.glTexCoord2f(0.0f, 1.0f);
-            gl.glVertex3f(-1.0f, 4.0f, -6.0f);  // Top Left
-            gl.glTexCoord2f(1.0f, 1.0f);
-            gl.glVertex3f(1.0f, 4.0f, -6.0f);   // Top Right
-            gl.glTexCoord2f(1.0f, 0.0f);
-            gl.glVertex3f(1.0f, 2.0f, -6.0f);  // Bottom Right
-            gl.glTexCoord2f(0.0f, 0.0f);
-            gl.glVertex3f(-1.0f, 2.0f, -6.0f); // Bottom Left
-            // Done Drawing The Quad
-        gl.glEnd();
-        
-        gl.glBindTexture(GL.GL_TEXTURE_2D, x);
-            gl.glBegin(GL.GL_QUADS);
-            gl.glTexCoord2f(0.0f, 1.0f);
-            gl.glVertex3f(1.0f, 1.0f, -6.0f);  // Top Left
-            gl.glTexCoord2f(1.0f, 1.0f);
-            gl.glVertex3f(-1.0f, 1.0f, -6.0f);   // Top Right
-            gl.glTexCoord2f(1.0f, 0.0f);
-            gl.glVertex3f(-1.0f, -1.0f, -6.0f);  // Bottom Right
-            gl.glTexCoord2f(0.0f, 0.0f);
-            gl.glVertex3f(1.0f, -1.0f, -6.0f); // Bottom Left
-            // Done Drawing The Quad
-        gl.glEnd(); 
-        
-        gl.glBindTexture(GL.GL_TEXTURE_2D, x);
-            gl.glBegin(GL.GL_QUADS);
-            gl.glTexCoord2f(0.0f, 1.0f);
-            gl.glVertex3f(-4.0f, 1.0f, -6.0f);  // Top Left
-            gl.glTexCoord2f(1.0f, 1.0f);
-            gl.glVertex3f(-2.0f, 1.0f, -6.0f);   // Top Right
-            gl.glTexCoord2f(1.0f, 0.0f);
-            gl.glVertex3f(-2.0f, -1.0f, -6.0f);  // Bottom Right
-            gl.glTexCoord2f(0.0f, 0.0f);
-            gl.glVertex3f(-4.0f, -1.0f, -6.0f); // Bottom Left
-            // Done Drawing The Quad
-        gl.glEnd(); 
-        
-        gl.glBindTexture(GL.GL_TEXTURE_2D, x);
-            gl.glBegin(GL.GL_QUADS);
-            gl.glTexCoord2f(0.0f, 1.0f);
-            gl.glVertex3f(2.0f, 1.0f, -6.0f);  // Top Left
-            gl.glTexCoord2f(1.0f, 1.0f);
-            gl.glVertex3f(4.0f, 1.0f, -6.0f);   // Top Right
-            gl.glTexCoord2f(1.0f, 0.0f);
-            gl.glVertex3f(4.0f, -1.0f, -6.0f);  // Bottom Right
-            gl.glTexCoord2f(0.0f, 0.0f);
-            gl.glVertex3f(2.0f, -1.0f, -6.0f); // Bottom Left
-            // Done Drawing The Quad
-        gl.glEnd(); 
-        
-        
-        gl.glDisable(GL.GL_TEXTURE_2D);*/
         
         gl.glEnable(GL.GL_TEXTURE_2D);
         float ej_x = -4.0f, ej_y = 2.0f;
@@ -464,7 +482,99 @@ public class Triqui implements GLEventListener {
             }
             ej_y = ej_y - 3;
         }
+        
+        if (lose){
+            gl.glBindTexture(GL.GL_TEXTURE_2D, los);
+            gl.glBegin(GL.GL_QUADS);
+                gl.glTexCoord2f(0.0f, 1.0f);
+                gl.glVertex3f(-3.3f, -2.0f, 0.0f);  // Top Left
+                gl.glTexCoord2f(1.0f, 1.0f);
+                gl.glVertex3f(-2.3f, -2.0f, 0.0f);   // Top Right
+                gl.glTexCoord2f(1.0f, 0.0f);
+                gl.glVertex3f(-2.3f, -1.0f, 0.0f);  // Bottom Right
+                gl.glTexCoord2f(0.0f, 0.0f);
+                gl.glVertex3f(-3.3f, -1.0f, 0.0f); // Bottom Left
+            // Done Drawing The Quad
+            gl.glEnd();
+        }
+        
+        if (nulle){
+            gl.glBindTexture(GL.GL_TEXTURE_2D, nul);
+            gl.glBegin(GL.GL_QUADS);
+                gl.glTexCoord2f(0.0f, 1.0f);
+                gl.glVertex3f(-3.3f, -2.0f, 0.0f);  // Top Left
+                gl.glTexCoord2f(1.0f, 1.0f);
+                gl.glVertex3f(-2.3f, -2.0f, 0.0f);   // Top Right
+                gl.glTexCoord2f(1.0f, 0.0f);
+                gl.glVertex3f(-2.3f, -1.0f, 0.0f);  // Bottom Right
+                gl.glTexCoord2f(0.0f, 0.0f);
+                gl.glVertex3f(-3.3f, -1.0f, 0.0f); // Bottom Left
+            // Done Drawing The Quad
+            gl.glEnd();
+        }
+        
+        if (reset){
+            gl.glBindTexture(GL.GL_TEXTURE_2D, res);
+            gl.glBegin(GL.GL_QUADS);
+                gl.glTexCoord2f(0.0f, 1.0f);
+                gl.glVertex3f(2.3f, -2.0f, 0.0f);  // Top Left
+                gl.glTexCoord2f(1.0f, 1.0f);
+                gl.glVertex3f(3.3f, -2.0f, 0.0f);   // Top Right
+                gl.glTexCoord2f(1.0f, 0.0f);
+                gl.glVertex3f(3.3f, -1.0f, 0.0f);  // Bottom Right
+                gl.glTexCoord2f(0.0f, 0.0f);
+                gl.glVertex3f(2.3f, -1.0f, 0.0f); // Bottom Left
+            // Done Drawing The Quad
+            gl.glEnd();
+        }
+        
         gl.glDisable(GL.GL_TEXTURE_2D);
+        
+        if (dib_lin){
+            gl.glLineWidth(15);
+            gl.glColor3f(1.0f, 0.0f, 0.0f);
+            gl.glBegin(GL.GL_LINES);
+            switch(linea){
+                case 1:
+                    gl.glVertex2d(-2.2,1.4);
+                    gl.glVertex2d(2.2,1.4);
+                    break;
+                case 2:
+                   gl.glVertex2d(-2.2,0.0);
+                   gl.glVertex2d(2.2,0.0);
+                   break;
+                case 3:
+                   gl.glVertex2d(-2.2,-1.4);
+                   gl.glVertex2d(2.2,-1.4);
+                   break;
+                case 4:
+                   gl.glVertex2d(-1.4,2.2);
+                   gl.glVertex2d(-1.4,-2.2);
+                   break;
+                case 5:
+                   gl.glVertex2d(0.0,2.2);
+                   gl.glVertex2d(0.0,-2.2);
+                   break;
+                case 6:
+                   gl.glVertex2d(1.4,2.2);
+                   gl.glVertex2d(1.4,-2.2);
+                   break;
+                case 8:
+                   gl.glVertex2d(-1.9,-2.0);
+                   gl.glVertex2d(1.9,2.0);
+                   break;
+                case 7:
+                   gl.glVertex2d(-1.9,2.0);
+                   gl.glVertex2d(1.9,-2.0);
+                     
+            }
+            gl.glEnd();
+        }
+        
+        /*gl.beginRendering(gl.getWidth(), gl.getHeight()); 
+        gl.setColor(1.0f, 0.0f, 0.0f, 0.8f); // Recuerda RGB son los tres primeros 
+        gl.draw("MARCOS", 300, 300); // La cadena y la posicion 
+        gl.endRendering(); */
 
         // Flush all drawing operations to the graphics card
         gl.glFlush();
@@ -532,6 +642,20 @@ public class Triqui implements GLEventListener {
             case 9: cor.x = 2; cor.y = 2; break;
         }
         return cor;
+    }
+    
+    private static void resetear (){
+        for (int i=0; i<3; i++){
+            for (int j=0; j<3; j++){
+                matriz[i][j] = -1;
+                sombra[i][j] = true;
+            }
+        }
+        
+        lose = false;
+        reset = false;
+        nulle = false;
+        dib_lin = false;
     }
 }
 
