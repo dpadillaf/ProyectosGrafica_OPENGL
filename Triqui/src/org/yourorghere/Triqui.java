@@ -188,6 +188,55 @@ public class Triqui implements GLEventListener {
             matriz[1][1] = 0;
             sombra[1][1] = false;
         }else{
+            Coordenada verM = verifica (0);
+            Coordenada verJ = verifica (1);
+            //System.out.println(verM);
+            //System.out.println(verJ);
+            if (verM.x != -1 && sombra[verM.x][verM.y]){
+                matriz[verM.x][verM.y] = 0;
+                sombra[verM.x][verM.y] = false;
+            }else if (verJ.x != -1 && sombra[verJ.x][verJ.y]){
+                matriz[verJ.x][verJ.y] = 0;
+                sombra[verJ.x][verJ.y] = false;
+            }else if (matriz[0][0]==1 && matriz[2][2]==1 && sombra[0][1] && sombra[0][2] && sombra[1][0]
+                    && sombra[1][2] && sombra[2][0] && sombra[2][1]){
+                Coordenada cor = posicion(0);
+                matriz[cor.x][cor.y] = 0;
+                sombra[cor.x][cor.y] = false;
+            }else if (matriz[0][2]==1 && matriz[2][0]==1 && sombra[0][1] && sombra[0][0] && sombra[1][0]
+                    && sombra[1][2] && sombra[2][2] && sombra[2][1]){
+                Coordenada cor = posicion(0);
+                matriz[cor.x][cor.y] = 0;
+                sombra[cor.x][cor.y] = false;
+            }else if (matriz[0][1]==1 && matriz[1][0]==1 && sombra[0][2] && sombra[0][0] && sombra[2][0]
+                    && sombra[1][2] && sombra[2][2] && sombra[2][1]){
+                matriz[0][0] = 0;
+                sombra[0][0] = false;
+            }else if (matriz[2][1]==1 && matriz[1][0]==1 && sombra[0][2] && sombra[0][0] && sombra[2][0]
+                    && sombra[1][2] && sombra[2][2] && sombra[0][1]){
+                matriz[2][0] = 0;
+                sombra[2][0] = false;
+            }else if (matriz[2][1]==1 && matriz[1][2]==1 && sombra[0][2] && sombra[0][0] && sombra[2][0]
+                    && sombra[1][0] && sombra[2][2] && sombra[0][1]){
+                matriz[2][2] = 0;
+                sombra[2][2] = false;
+            }else if (matriz[0][1]==1 && matriz[1][2]==1 && sombra[0][2] && sombra[0][0] && sombra[2][0]
+                    && sombra[1][0] && sombra[2][2] && sombra[2][1]){
+                matriz[0][2] = 0;
+                sombra[0][2] = false;
+            }else{
+                if (sombra[0][0] || sombra[0][2] || sombra[2][0] || sombra[2][2]){
+                    Coordenada cor = posicion(1);
+                    matriz[cor.x][cor.y] = 0;
+                    sombra[cor.x][cor.y] = false;
+                    System.out.println("entra aqui1 "+cor.x+" "+cor.y);
+                }else if (sombra[0][1] || sombra[1][0] || sombra[1][2] || sombra[2][1]){
+                    Coordenada cor = posicion(0);
+                    matriz[cor.x][cor.y] = 0;
+                    sombra[cor.x][cor.y] = false;
+                    System.out.println("entra aqui4 "+cor.x+" "+cor.y);
+                }
+            }
             
         }
         comprueba();
@@ -195,27 +244,37 @@ public class Triqui implements GLEventListener {
     
     private static Coordenada verifica (int v){
         Coordenada una = new Coordenada ();
-        if (matriz[0][0]==v && matriz[0][1]==v){ una.x = 0; una.y = 2; return una; }
-        if (matriz[0][0]==v && matriz[1][0]==v){ una.x = 2; una.y = 0; return una; }
-        if (matriz[0][0]==v && matriz[1][1]==v){ una.x = 2; una.y = 2; return una; }
+        if (matriz[0][0]==v && matriz[0][1]==v && sombra[0][2]){ una.x = 0; una.y = 2; return una; }
+        if (matriz[0][0]==v && matriz[1][0]==v && sombra[2][0]){ una.x = 2; una.y = 0; return una; }
+        if (matriz[0][0]==v && matriz[1][1]==v && sombra[2][2]){ una.x = 2; una.y = 2; return una; }
+        if (matriz[0][0]==v && matriz[0][2]==v && sombra[0][1]){ una.x = 0; una.y = 1; return una; }
+        if (matriz[0][0]==v && matriz[2][2]==v && sombra[1][1]){ una.x = 1; una.y = 1; return una; }
+        if (matriz[0][0]==v && matriz[2][0]==v && sombra[1][0]){ una.x = 1; una.y = 0; return una; }
         
-        if (matriz[0][1]==v && matriz[0][2]==v){ una.x = 0; una.y = 0; return una; }
-        if (matriz[0][1]==v && matriz[1][1]==v){ una.x = 2; una.y = 1; }
+        if (matriz[0][1]==v && matriz[0][2]==v && sombra[0][0]){ una.x = 0; una.y = 0; return una; }
+        if (matriz[0][1]==v && matriz[1][1]==v && sombra[2][1]){ una.x = 2; una.y = 1; return una; }
+        if (matriz[0][1]==v && matriz[2][1]==v && sombra[1][1]){ una.x = 1; una.y = 1; return una; }
         
-        if (matriz[0][2]==v && matriz[1][1]==v){ una.x = 2; una.y = 0; return una; }
-        if (matriz[0][2]==v && matriz[1][2]==v){ una.x = 2; una.y = 2; return una; }
+        if (matriz[0][2]==v && matriz[1][1]==v && sombra[2][0]){ una.x = 2; una.y = 0; return una; }
+        if (matriz[0][2]==v && matriz[1][2]==v && sombra[2][2]){ una.x = 2; una.y = 2; return una; }
+        if (matriz[0][2]==v && matriz[2][0]==v && sombra[1][1]){ una.x = 1; una.y = 1; return una; }
+        if (matriz[0][2]==v && matriz[2][2]==v && sombra[1][2]){ una.x = 1; una.y = 2; return una; }
         
-        if (matriz[1][0]==v && matriz[1][1]==v){ una.x = 1; una.y = 2; return una; }
-        if (matriz[1][0]==v && matriz[2][0]==v){ una.x = 0; una.y = 0; return una; }
+        if (matriz[1][0]==v && matriz[1][1]==v && sombra[1][2]){ una.x = 1; una.y = 2; return una; }
+        if (matriz[1][0]==v && matriz[2][0]==v && sombra[0][0]){ una.x = 0; una.y = 0; return una; }
+        if (matriz[1][0]==v && matriz[1][2]==v && sombra[1][1]){ una.x = 1; una.y = 1; return una; }
         
-        if (matriz[1][1]==v && matriz[1][2]==v){ una.x = 1; una.y = 0; return una; }
-        if (matriz[1][1]==v && matriz[2][2]==v){ una.x = 0; una.y = 0; return una; }
-        if (matriz[1][1]==v && matriz[2][1]==v){ una.x = 0; una.y = 1; return una; }
-        if (matriz[1][1]==v && matriz[2][0]==v){ una.x = 0; una.y = 2; return una; }
+        if (matriz[1][1]==v && matriz[1][2]==v && sombra[1][0]){ una.x = 1; una.y = 0; return una; }
+        if (matriz[1][1]==v && matriz[2][2]==v && sombra[0][0]){ una.x = 0; una.y = 0; return una; }
+        if (matriz[1][1]==v && matriz[2][1]==v && sombra[0][1]){ una.x = 0; una.y = 1; return una; }
+        if (matriz[1][1]==v && matriz[2][0]==v && sombra[0][2]){ una.x = 0; una.y = 2; return una; }
         
-        if (matriz[2][0]==v && matriz[2][1]==v){ una.x = 2; una.y = 2; return una; }
+        if (matriz[1][2]==v && matriz[2][2]==v && sombra[0][2]){ una.x = 0; una.y = 2; return una; }
         
-        if (matriz[2][1]==v && matriz[2][2]==v){ una.x = 2; una.y = 0; return una; }
+        if (matriz[2][0]==v && matriz[2][1]==v && sombra[2][2]){ una.x = 2; una.y = 2; return una; }
+        if (matriz[2][0]==v && matriz[2][2]==v && sombra[2][1]){ una.x = 2; una.y = 1; return una; }
+        
+        if (matriz[2][1]==v && matriz[2][2]==v && sombra[2][0]){ una.x = 2; una.y = 0; return una; }
         
         return una;
     }
@@ -427,6 +486,52 @@ public class Triqui implements GLEventListener {
             this.x = -1;
             this.y = -1;
         }
+    }
+    
+    private static Coordenada posicion(int p_i){
+        int x =  (int) (Math.random() * 9) + 1;
+        System.out.println("entra aqui3 "+x+" "+p_i);
+        if (p_i == 1){
+            while(x % 2 == 0 || x == 5){
+                x = (int) (Math.random() * 9) + 1;
+            }
+        }else{
+            while( x % 2 != 0 ){
+                x = (int) (Math.random() * 9) + 1;
+            }
+            System.out.println("entra aqui 2 "+x);
+        }
+        
+        Coordenada cor = transformacion (x);
+        if ( sombra[cor.x][cor.y]== false ){
+           System.out.println("entra aqui 5 "+cor.x+" "+cor.y);
+           if ( sombra[0][0] ){ cor.x=0; cor.y=0; }
+           else if ( sombra[0][2] ){ cor.x=0; cor.y=2; }
+           else if ( sombra[2][0] ){ cor.x=2; cor.y=0; }
+           else if ( sombra[2][2] ){ cor.x=2; cor.y=2; }
+           else if ( sombra[0][1] ){ cor.x=0; cor.y=1; }
+           else if ( sombra[1][0] ){ cor.x=1; cor.y=0; }
+           else if ( sombra[1][2] ){ cor.x=1; cor.y=2; }
+           else if ( sombra[2][1] ){ cor.x=2; cor.y=1; }
+        }
+        
+        return cor;
+    }
+    
+    private static Coordenada transformacion (int n){
+        Coordenada cor = new Coordenada();
+        switch(n){
+            case 1: cor.x = 0; cor.y = 0; break;
+            case 2: cor.x = 0; cor.y = 1; break;
+            case 3: cor.x = 0; cor.y = 2; break;
+            case 4: cor.x = 1; cor.y = 0; break;
+            case 5: cor.x = 1; cor.y = 1; break;
+            case 6: cor.x = 1; cor.y = 2; break;
+            case 7: cor.x = 2; cor.y = 0; break;
+            case 8: cor.x = 2; cor.y = 1; break;
+            case 9: cor.x = 2; cor.y = 2; break;
+        }
+        return cor;
     }
 }
 
