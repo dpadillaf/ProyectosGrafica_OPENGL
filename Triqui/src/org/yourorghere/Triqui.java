@@ -438,7 +438,7 @@ public class Triqui implements GLEventListener {
         gl.glTranslatef(0.0f, 0.0f, -6.0f);
 
         gl.glLineWidth(5);
-	gl.glColor3f(1.0f, 1.0f, 1.0f);
+	gl.glColor3f(1.0f, 0.0f, 1.0f);
 	gl.glBegin(GL.GL_LINES);
             gl.glVertex2d(2.0,0.8);
             gl.glVertex2d(-2.0,0.8);
