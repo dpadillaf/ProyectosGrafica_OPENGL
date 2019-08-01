@@ -27,7 +27,7 @@ import javax.media.opengl.glu.GLU;
  * This version is equal to Brian Paul's version 1.2 1999/10/21
  */
 public class Planeta implements GLEventListener {
-
+    
     float x;
     private int tierra, luna, estrella;
     float [] ranX = new float[20];
@@ -203,7 +203,7 @@ public class Planeta implements GLEventListener {
     
     public static float getRandom() {
         Random rand = new Random();
-        return  -4 + ( 4 - (-4) ) * rand.nextFloat();
+        return  -1 + ( 4 - (-1) ) * rand.nextFloat();
     }
 
     public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
